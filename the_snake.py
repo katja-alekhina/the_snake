@@ -65,7 +65,7 @@ class Apple(GameObject):
         return (random_x, random_y)
 
     def draw(self):
-            """Метод, отрисовывающий яблоко на поле."""
+        """Метод, отрисовывающий яблоко на поле."""
         rect = pygame.Rect(self.position, (GRID_SIZE, GRID_SIZE))
         pygame.draw.rect(screen, self.body_color, rect)
         pygame.draw.rect(screen, BORDER_COLOR, rect, 1)
