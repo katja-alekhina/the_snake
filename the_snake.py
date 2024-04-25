@@ -117,14 +117,15 @@ class Snake(GameObject):
         """Метод, возвращающий координаты головы змейки."""
         return self.positions[0]
 
-    """Метод, заново отрисовывающий змейку."""
     def reset(self):
+        """Метод, заново отрисовывающий змейку."""
         self.length = 1
         self.positions = [(SCREEN_WIDTH // 2), (SCREEN_HEIGHT // 2)]
         self.direction = choice([LEFT, UP, RIGHT, DOWN])
 
 
 def handle_keys(game_object):
+    """Метод, обрабатывающий нажатия клавиш."""
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             pygame.quit()
@@ -141,6 +142,7 @@ def handle_keys(game_object):
 
 
 def main():
+    """Функция для основного хода игры."""
     pygame.init()
     apple = Apple()
     snake = Snake()
