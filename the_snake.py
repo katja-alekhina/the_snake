@@ -48,8 +48,7 @@ class GameObject:
 
     def draw(self):
         """Базовый метод отрисовки объекта, переопределяющийся далее."""
-        raise NotImplementedError(
-                'Определите draw в %s.' % (self.__class__.__name__))
+        raise NotImplementedError('Опр. draw %s.' % (self.__class__.__name__))
 
 
 class Apple(GameObject):
