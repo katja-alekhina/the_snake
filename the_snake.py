@@ -54,7 +54,7 @@ class GameObject:
 class Apple(GameObject):
     """Класс, описывающий яблоко и действия с ним."""
 
-    def __init__(self, taken_positions) -> None:
+    def __init__(self, taken_positions=None) -> None:
         self.body_color = APPLE_COLOR
         self.taken_positions = taken_positions
         self.position = self.randomize_position(taken_positions)
