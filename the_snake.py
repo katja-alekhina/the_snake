@@ -1,4 +1,5 @@
 from random import choice, randint
+from exceptions import EndGameError
 import pygame
 
 # Константы для размеров поля и сетки:
@@ -6,6 +7,8 @@ SCREEN_WIDTH, SCREEN_HEIGHT = 640, 480
 GRID_SIZE = 20
 GRID_WIDTH = SCREEN_WIDTH // GRID_SIZE
 GRID_HEIGHT = SCREEN_HEIGHT // GRID_SIZE
+left_positions = [(x, y) for x in range(GRID_WIDTH)
+                  for y in range(GRID_HEIGHT)]
 
 # Направления движения:
 UP = (0, -1)
@@ -44,30 +47,31 @@ class GameObject:
     def __init__(self, position=((SCREEN_WIDTH // 2), (SCREEN_HEIGHT // 2)),
                  body_color=None) -> None:
         self.position = position
-        self.body_color = None
+        self.body_color = body_color
 
     def draw(self):
         """Базовый метод отрисовки объекта, переопределяющийся далее."""
-        raise NotImplementedError('Опр. draw %s.' % (self.__class__.__name__))
+        raise NotImplementedError('Определите  draw в'
+                                  f'{self.__class__.__name__}')
 
 
 class Apple(GameObject):
     """Класс, описывающий яблоко и действия с ним."""
 
     def __init__(self, taken_positions=[]) -> None:
-        self.body_color = APPLE_COLOR
-        self.taken_positions = taken_positions
-        self.position = self.randomize_position(taken_positions)
+        super().__init__(body_color=APPLE_COLOR,
+                         position=self.randomize_position(taken_positions))
 
     def randomize_position(self, taken_positions):
         """Метод, рандомно определяющий позицию яблока."""
-        random_x = randint(0, GRID_WIDTH) * GRID_SIZE
-        random_y = randint(0, GRID_HEIGHT) * GRID_SIZE
-        random_position = (random_x, random_y)
-        while random_position in taken_positions:
-            random_x = randint(0, GRID_WIDTH) * GRID_SIZE
-            random_y = randint(0, GRID_HEIGHT) * GRID_SIZE
-            random_position = (random_x, random_y)
+        random_position = (randint(0, GRID_WIDTH) * GRID_SIZE,
+                           randint(0, GRID_HEIGHT) * GRID_SIZE)
+        if len(taken_positions) < GRID_HEIGHT * GRID_HEIGHT:
+            while random_position in taken_positions:
+                random_position = (randint(0, GRID_WIDTH) * GRID_SIZE,
+                                   randint(0, GRID_HEIGHT) * GRID_SIZE)
+        else:
+            raise EndGameError
         return random_position
 
     def draw(self):   # Это прекод, он мне изначально дан.
@@ -81,12 +85,11 @@ class Snake(GameObject):
     """Класс, описывающий змейку и ее поведение."""
 
     def __init__(self) -> None:
-        super().__init__()
+        super().__init__(body_color=SNAKE_COLOR)
         self.length = 1
         self.positions = [(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2)]
         self.direction = RIGHT
         self.next_direction = None
-        self.body_color = SNAKE_COLOR
         self.last = None
 
     def update_direction(self):   # Это прекод, он мне дан.
@@ -123,8 +126,6 @@ class Snake(GameObject):
 
     def reset(self):
         """Метод, заново отрисовывающий змейку."""
-        self.length = 1
-        self.positions = [(SCREEN_WIDTH // 2), (SCREEN_HEIGHT // 2)]
         self.direction = choice([LEFT, UP, RIGHT, DOWN])
         self.__init__()
 
