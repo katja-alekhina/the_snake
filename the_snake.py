@@ -41,9 +41,9 @@ clock = pygame.time.Clock()
 class GameObject:
     """Базовый класс, от которого наследуются игровые объекты."""
 
-    def __init__(self, position=None, body_color=None) -> None:
-        if position is not None:
-            self.position = ((SCREEN_WIDTH // 2), (SCREEN_HEIGHT // 2))
+    def __init__(self, position=((SCREEN_WIDTH // 2), (SCREEN_HEIGHT // 2)),
+                 body_color=None) -> None:
+        self.position = position
         self.body_color = None
 
     def draw(self):
@@ -112,7 +112,7 @@ class Snake(GameObject):
 
     def draw(self):
         """Метод, отрисовывающий змейку."""
-        for position in self.positions:   # Это прекод, не я его писала.
+        for position in self.positions:   # Это прекод, он мне дан.
             rect = (pygame.Rect(position, (GRID_SIZE, GRID_SIZE)))
             pygame.draw.rect(screen, self.body_color, rect)
             pygame.draw.rect(screen, BORDER_COLOR, rect, 1)
